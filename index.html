@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSF — FCC RF Crackdown Impact Brief</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap');
+
+  :root {
+    --bg:        #0a0b0d;
+    --bg2:       #0f1114;
+    --bg3:       #141619;
+    --border:    #1e2127;
+    --border2:   #2a2d35;
+    --text:      #c8cdd8;
+    --text-dim:  #666c7a;
+    --text-bright:#e8ecf4;
+    --red:       #e03535;
+    --red-dim:   #7a1a1a;
+    --amber:     #d97706;
+    --amber-dim: #6b3a02;
+    --green:     #16a34a;
+    --green-dim: #0a3d22;
+    --accent:    #3b82f6;
+    --mono:      'Share Tech Mono', monospace;
+    --cond:      'Barlow Condensed', sans-serif;
+    --body:      'Barlow', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, #ffffff03 39px, #ffffff03 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, #ffffff02 39px, #ffffff02 40px);
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    border-top: 3px solid var(--red);
+    padding-top: 20px;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .doc-header::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2) 0%, transparent 100%);
+    margin-top: 20px;
+  }
+
+  .doc-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .doc-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .doc-classification {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    border: 1px solid var(--red-dim);
+    padding: 3px 10px;
+    letter-spacing: 0.15em;
+    background: rgba(224,53,53,0.06);
+  }
+
+  .doc-title {
+    font-family: var(--cond);
+    font-size: clamp(26px, 5vw, 44px);
+    font-weight: 900;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-top: 14px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .doc-title span { color: var(--red); }
+
+  .doc-subtitle {
+    font-family: var(--cond);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-dim);
+    margin-top: 6px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .doc-scope {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--amber);
+    background: rgba(217,119,6,0.08);
+    border-left: 3px solid var(--amber);
+    padding: 8px 14px;
+    display: inline-block;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section {
+    margin-bottom: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    min-width: 32px;
+  }
+
+  .section-title {
+    font-family: var(--cond);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border: 1px solid;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .alert.red   { border-color: var(--red-dim);   background: rgba(224,53,53,0.06); }
+  .alert.amber { border-color: var(--amber-dim); background: rgba(217,119,6,0.06); }
+
+  .alert-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+  }
+  .alert.red   .alert-label { color: var(--red); }
+  .alert.amber .alert-label { color: var(--amber); }
+
+  .alert p {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* ── DEVICE CARDS ── */
+  .device-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .device-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px;
+    position: relative;
+  }
+
+  .device-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .device-card.risk-high   ::before,
+  .device-card.risk-high   { --card-accent: var(--red); }
+  .device-card.risk-high::before   { background: var(--red); }
+  .device-card.risk-medium { --card-accent: var(--amber); }
+  .device-card.risk-medium::before { background: var(--amber); }
+  .device-card.risk-low    { --card-accent: var(--green); }
+  .device-card.risk-low::before    { background: var(--green); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: var(--cond);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .card-impact-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 7px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  .risk-high   .card-impact-badge { background: var(--red-dim);   color: var(--red);   border: 1px solid var(--red-dim); }
+  .risk-medium .card-impact-badge { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-dim); }
+  .risk-low    .card-impact-badge { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-dim); }
+
+  .card-models {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    line-height: 1.8;
+  }
+
+  .card-impact-text {
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .card-cost {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 5px 8px;
+    background: var(--bg3);
+    border-left: 2px solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .risk-high   .card-cost { border-color: var(--red);   }
+  .risk-medium .card-cost { border-color: var(--amber); }
+  .risk-low    .card-cost { border-color: var(--green); }
+
+  .cost-label { color: var(--text-dim); font-size: 10px; letter-spacing: 0.08em; }
+  .cost-value { color: var(--text-bright); font-weight: bold; }
+
+  /* ── RISK TABLE ── */
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .risk-table th {
+    font-family: var(--cond);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border2);
+    background: var(--bg2);
+  }
+
+  .risk-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .risk-table tr:last-child td { border-bottom: none; }
+
+  .risk-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+    border: 1px solid;
+  }
+  .badge.red    { color: var(--red);   border-color: var(--red-dim);   background: rgba(224,53,53,0.1); }
+  .badge.amber  { color: var(--amber); border-color: var(--amber-dim); background: rgba(217,119,6,0.1); }
+  .badge.green  { color: var(--green); border-color: #14532d;          background: rgba(22,163,74,0.1); }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--red), var(--amber), var(--border2));
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 18px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 8px; height: 8px;
+    border: 1px solid;
+    background: var(--bg);
+  }
+  .tl-item.now::before    { border-color: var(--red);   background: var(--red); }
+  .tl-item.mid::before    { border-color: var(--amber); }
+  .tl-item.future::before { border-color: var(--border2); }
+
+  .tl-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .tl-item.now    .tl-label { color: var(--red); }
+  .tl-item.mid    .tl-label { color: var(--amber); }
+  .tl-item.future .tl-label { color: var(--text-dim); }
+
+  .tl-content {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .tl-content ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 4px;
+  }
+
+  .tl-content ul li {
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  .tl-content ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+
+  /* ── ACTION ITEMS ── */
+  .action-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .action-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .action-icon {
+    font-family: var(--mono);
+    font-size: 18px;
+    line-height: 1;
+    min-width: 28px;
+    margin-top: 2px;
+  }
+
+  .action-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .action-title {
+    font-family: var(--cond);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-bright);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  /* ── BOTTOM LINE ── */
+  .bottom-line {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-left: 4px solid var(--red);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+
+  .bottom-line .bl-title {
+    font-family: var(--cond);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .bottom-line p {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  /* ── COST SUMMARY BAR ── */
+  .cost-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .cost-cell {
+    background: var(--bg2);
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .cost-cell .cc-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .cost-cell .cc-value {
+    font-family: var(--cond);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  .cost-cell.high .cc-value   { color: var(--red); }
+  .cost-cell.medium .cc-value { color: var(--amber); }
+  .cost-cell.low .cc-value    { color: var(--green); }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── INLINE MONO TAGS ── */
+  code {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--amber);
+    background: rgba(217,119,6,0.08);
+    padding: 1px 5px;
+    border: 1px solid rgba(217,119,6,0.2);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body::before { display: none; }
+    body { background: white; color: black; }
+  }
+
+  /* ── FADE IN ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .section:nth-child(1)  { animation-delay: 0.05s; }
+  .section:nth-child(2)  { animation-delay: 0.10s; }
+  .section:nth-child(3)  { animation-delay: 0.15s; }
+  .section:nth-child(4)  { animation-delay: 0.20s; }
+  .section:nth-child(5)  { animation-delay: 0.25s; }
+  .section:nth-child(6)  { animation-delay: 0.30s; }
+  .section:nth-child(7)  { animation-delay: 0.35s; }
+  .section:nth-child(8)  { animation-delay: 0.40s; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-meta">
+      <div>
+        <div class="doc-id">DOC-ID: NSF-FCC-2025-001 &nbsp;|&nbsp; REV 1.0 &nbsp;|&nbsp; 2025-Q2</div>
+      </div>
+      <div class="doc-classification">INTERNAL — OPERATIONS USE ONLY</div>
+    </div>
+    <div class="doc-title">FCC <span>RF Hardware</span> Crackdown<br>Operational Impact Brief</div>
+    <div class="doc-subtitle">National Security &amp; Fire LLC — Technology Stack Assessment</div>
+    <div class="doc-scope">SCOPE: Routers · Access Points · IP Cameras · LTE Fire Communicators</div>
+  </div>
+
+  <!-- SECTION 1: TRIGGER -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01 //</span>
+      <span class="section-title">Why This Matters — Core Trigger</span>
+    </div>
+
+    <div class="alert red">
+      <div class="alert-label">⚠ FCC REGULATORY ACTION</div>
+      <p>The Federal Communications Commission has added foreign-made routers and networking RF equipment to the <strong style="color:#e8ecf4">Covered List</strong> as a direct result of cyberattack campaigns attributed to <code>Volt Typhoon</code> and <code>Salt Typhoon</code> threat actors using these devices to compromise critical infrastructure and life safety systems.</p>
+    </div>
+
+    <div class="alert amber">
+      <div class="alert-label">▸ RESULT</div>
+      <p><strong style="color:#e8ecf4">No new FCC equipment authorizations</strong> will be granted for foreign-manufactured RF networking gear. Devices already installed and authorized remain legal to operate — but new procurement is disrupted.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: DEVICE CARDS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02 //</span>
+      <span class="section-title">Affected Equipment — NSF Field Stack</span>
+    </div>
+
+    <div class="device-grid">
+
+      <!-- Routers -->
+      <div class="device-card risk-high">
+        <div class="card-header">
+          <div class="card-title">Routers / Gateways</div>
+          <div class="card-impact-badge">HIGH IMPACT</div>
+        </div>
+        <div class="card-models">
+          UniFi Dream Machine (UDM / UDM-SE)<br>
+          UniFi Cloud Gateway (UCG series)<br>
+          Netgear Nighthawk<br>
+          Asus RT / ROG series<br>
+          TP-Link Omada / Archer
+        </div>
+        <div class="card-impact-text">Directly targeted by FCC rule. These connect fire panels, NVRs, and remote monitoring — any supply disruption cascades across the entire deployed stack.</div>
+        <div class="card-cost">
+          <span class="cost-label">EXPECTED COST INCREASE</span>
+          <span class="cost-value">+15 – 30%</span>
+        </div>
+      </div>
+
+      <!-- APs -->
+      <div class="device-card risk-high">
+        <div class="card-header">
+          <div class="card-title">Access Points / Wireless Links</div>
+          <div class="card-impact-badge">HIGH IMPACT</div>
+        </div>
+        <div class="card-models">
+          UniFi U6 / U7 series<br>
+          Ubiquiti AirMax / UISP radios<br>
+          Mesh / bridge links (building-to-building)
+        </div>
+        <div class="card-impact-text">All RF transmitters are fully regulated. These are core infrastructure for remote camera feeds and wireless fire panel connectivity. Long-range AirMax links face steeper increases than indoor APs.</div>
+        <div class="card-cost">
+          <span class="cost-label">APs / AirMax COST INCREASE</span>
+          <span class="cost-value">+10 – 35%</span>
+        </div>
+      </div>
+
+      <!-- WiFi Cameras -->
+      <div class="device-card risk-high">
+        <div class="card-header">
+          <div class="card-title">WiFi / Wireless Cameras</div>
+          <div class="card-impact-badge">DIRECT IMPACT</div>
+        </div>
+        <div class="card-models">
+          Alarm.com ADC-V724X (WiFi)<br>
+          Ring / Nest-style cams<br>
+          Battery-powered wireless cams
+        </div>
+        <div class="card-impact-text">RF transmitter = fully regulated. No workaround. These camera types should be migrated toward PoE alternatives wherever possible.</div>
+        <div class="card-cost">
+          <span class="cost-label">EXPECTED COST INCREASE</span>
+          <span class="cost-value">+15 – 30%</span>
+        </div>
+      </div>
+
+      <!-- PoE Cameras -->
+      <div class="device-card risk-medium">
+        <div class="card-header">
+          <div class="card-title">PoE Cameras (Wired)</div>
+          <div class="card-impact-badge">INDIRECT IMPACT</div>
+        </div>
+        <div class="card-models">
+          Ubiquiti G5 / G6 Turret<br>
+          Alarm.com VC827P<br>
+          LTS / Hikvision-style PoE cams
+        </div>
+        <div class="card-impact-text">Not directly regulated — no onboard RF transmitter. Supply chain disruption and shared manufacturing cost increases still apply. Best available mitigation path for camera deployments.</div>
+        <div class="card-cost">
+          <span class="cost-label">EXPECTED COST INCREASE</span>
+          <span class="cost-value">+5 – 15%</span>
+        </div>
+      </div>
+
+      <!-- LTE Fire Comm -->
+      <div class="device-card risk-high">
+        <div class="card-header">
+          <div class="card-title">LTE Fire Communicators</div>
+          <div class="card-impact-badge">⚠ CRITICAL</div>
+        </div>
+        <div class="card-models">
+          Honeywell / Fire-Lite CLSS Pathway LTE<br>
+          Telguard TG-7FM<br>
+          Napco StarLink Fire
+        </div>
+        <div class="card-impact-text">Most affected category in the NSF stack. LTE = RF transmitter. Tied to UL 864, carrier networks, and fire monitoring redundancy requirements. Backorders will hit this category first.</div>
+        <div class="card-cost">
+          <span class="cost-label">EXPECTED COST INCREASE</span>
+          <span class="cost-value">+20 – 50%</span>
+        </div>
+      </div>
+
+      <!-- Switches -->
+      <div class="device-card risk-low">
+        <div class="card-header">
+          <div class="card-title">Wired Switches / Infrastructure</div>
+          <div class="card-impact-badge">LOW IMPACT</div>
+        </div>
+        <div class="card-models">
+          Unmanaged / PoE switches<br>
+          Patch panels, cabling<br>
+          Wired-only infrastructure
+        </div>
+        <div class="card-impact-text">Not directly regulated. No RF, no FCC jurisdiction. Indirect price pressure from shared overseas manufacturing still pushes costs up across the board.</div>
+        <div class="card-cost">
+          <span class="cost-label">EXPECTED COST INCREASE</span>
+          <span class="cost-value">+5 – 15%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3: COST SUMMARY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03 //</span>
+      <span class="section-title">Cost Impact Summary</span>
+    </div>
+    <div class="cost-summary">
+      <div class="cost-cell high">
+        <div class="cc-label">ROUTERS / APS</div>
+        <div class="cc-value">+15–30%</div>
+      </div>
+      <div class="cost-cell high">
+        <div class="cc-label">AIRMAX / LONG-RANGE RF</div>
+        <div class="cc-value">+20–35%</div>
+      </div>
+      <div class="cost-cell high">
+        <div class="cc-label">WIFI CAMERAS</div>
+        <div class="cc-value">+15–30%</div>
+      </div>
+      <div class="cost-cell medium">
+        <div class="cc-label">PoE CAMERAS</div>
+        <div class="cc-value">+5–15%</div>
+      </div>
+      <div class="cost-cell high">
+        <div class="cc-label">LTE FIRE COMM</div>
+        <div class="cc-value">+20–50%</div>
+      </div>
+      <div class="cost-cell low">
+        <div class="cc-label">SWITCHES / WIRED</div>
+        <div class="cc-value">+5–15%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: RISK RANKING -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04 //</span>
+      <span class="section-title">Risk Ranking — NSF Environment</span>
+    </div>
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Category</th>
+          <th>Regulatory Status</th>
+          <th>Exposure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge red">🔴 ACT NOW</span></td>
+          <td style="color:var(--text-bright);font-weight:500">LTE Fire Communicators</td>
+          <td style="color:var(--red);font-family:var(--mono);font-size:11px">DIRECT</td>
+          <td style="font-size:12px">Life safety + UL 864 + LTE = highest single-point exposure. Backorders imminent.</td>
+        </tr>
+        <tr>
+          <td><span class="badge red">🔴 ACT NOW</span></td>
+          <td style="color:var(--text-bright);font-weight:500">Wireless Backhaul (AirMax)</td>
+          <td style="color:var(--red);font-family:var(--mono);font-size:11px">DIRECT</td>
+          <td style="font-size:12px">Long-range RF links. Building-to-building bridging at risk of supply cutoff.</td>
+        </tr>
+        <tr>
+          <td><span class="badge amber">🟠 MONITOR</span></td>
+          <td style="color:var(--text-bright);font-weight:500">Routers / Gateways</td>
+          <td style="color:var(--amber);font-family:var(--mono);font-size:11px">DIRECT</td>
+          <td style="font-size:12px">Core network infrastructure. Price spikes likely within 3–6 months.</td>
+        </tr>
+        <tr>
+          <td><span class="badge amber">🟠 MONITOR</span></td>
+          <td style="color:var(--text-bright);font-weight:500">Access Points (WiFi)</td>
+          <td style="color:var(--amber);font-family:var(--mono);font-size:11px">DIRECT</td>
+          <td style="font-size:12px">SKU churn likely. Have 90-day buffer stock plan ready.</td>
+        </tr>
+        <tr>
+          <td><span class="badge green">🟢 LOWER</span></td>
+          <td style="color:var(--text-bright);font-weight:500">PoE Cameras</td>
+          <td style="color:var(--green);font-family:var(--mono);font-size:11px">INDIRECT</td>
+          <td style="font-size:12px">No RF = not directly regulated. Preferred camera deployment path going forward.</td>
+        </tr>
+        <tr>
+          <td><span class="badge green">🟢 LOWER</span></td>
+          <td style="color:var(--text-bright);font-weight:500">Wired Switches / Cabling</td>
+          <td style="color:var(--green);font-family:var(--mono);font-size:11px">INDIRECT</td>
+          <td style="font-size:12px">No FCC jurisdiction. Mild cost creep only.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 5: TIMELINE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05 //</span>
+      <span class="section-title">Operational Impact Timeline</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item now">
+        <div class="tl-label">▸ IMMEDIATE — 0–3 MONTHS</div>
+        <div class="tl-content">
+          <ul>
+            <li>Existing installs unaffected — no operational failures</li>
+            <li>Procurement queues beginning to reflect price adjustments</li>
+            <li>Watch distributor stock levels on LTE communicators</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item mid">
+        <div class="tl-label">▸ MID-TERM — 3–12 MONTHS</div>
+        <div class="tl-content">
+          <ul>
+            <li>Significant price spikes materialize across RF categories</li>
+            <li>SKU churn — legacy model numbers disappear from distribution</li>
+            <li>Backorders on APs and LTE fire communicators</li>
+            <li>Carrier approvals for replacement LTE modules may lag</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item future">
+        <div class="tl-label">▸ LONG-TERM — 12–24 MONTHS</div>
+        <div class="tl-content">
+          <ul>
+            <li>Forced migration to new hardware revisions or US-assembled alternatives</li>
+            <li>Fewer vendor options — consolidation likely</li>
+            <li>Pricing may stabilize but at a higher baseline</li>
+            <li>Some manufacturers may exit the US market segment entirely</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: BOTTOM LINE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06 //</span>
+      <span class="section-title">Bottom Line</span>
+    </div>
+    <div class="bottom-line">
+      <div class="bl-title">⚑ This Is Not Just a Router Problem</div>
+      <p>Every RF-enabled device in the NSF stack — routers, APs, wireless cameras, and especially LTE fire communicators — sits in the blast radius of this rule.</p>
+      <p>The most critical exposure is the <code>CLSS LTE module</code> category. These devices sit at the intersection of FCC RF regulation, UL 864 life safety requirements, and carrier network dependencies. A supply disruption here has direct life safety implications for monitored fire systems.</p>
+      <p>Wireless backhaul links (<code>AirMax / UISP</code>) are the second-highest risk — they underpin remote camera and panel connectivity across multi-site deployments.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7: ACTION ITEMS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07 //</span>
+      <span class="section-title">Recommended Actions</span>
+    </div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-icon" style="color:var(--red)">⬛</div>
+        <div class="action-text">
+          <div class="action-title">Stock LTE Communicators Now</div>
+          Buffer 30–60 day supply of CLSS LTE modules, TG-7FM, and StarLink units before backorders hit distribution channels.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon" style="color:var(--red)">⬛</div>
+        <div class="action-text">
+          <div class="action-title">Pre-buy APs and Radios</div>
+          Establish inventory buffer on UniFi APs and AirMax backhaul hardware ahead of SKU churn and price spikes.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon" style="color:var(--amber)">◼</div>
+        <div class="action-text">
+          <div class="action-title">Pivot New Installs to PoE Cameras</div>
+          Favor wired PoE camera deployments over WiFi where possible. PoE is not regulated and reduces ongoing RF dependency.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon" style="color:var(--amber)">◼</div>
+        <div class="action-text">
+          <div class="action-title">IP-Primary + LTE Backup Fire Paths</div>
+          Where feasible, design fire panel comms with wired IP as primary and LTE as redundant path — reduces LTE unit count per site.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon" style="color:var(--amber)">◼</div>
+        <div class="action-text">
+          <div class="action-title">Avoid WiFi-Only Deployments</div>
+          No new installs should depend exclusively on WiFi cameras or wireless-only backhaul without a wired fallback path.
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-icon" style="color:var(--text-dim)">◻</div>
+        <div class="action-text">
+          <div class="action-title">Track Vendor Advisories</div>
+          Monitor Ubiquiti, Honeywell, and Telguard channels for SKU discontinuation notices and replacement hardware paths.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="footer-text">NSF-FCC-2025-001 &nbsp;·&nbsp; National Security &amp; Fire LLC &nbsp;·&nbsp; Internal Use Only</div>
+    <div class="footer-text">Data current as of 2025-Q2 &nbsp;·&nbsp; Verify LTE model availability with distributor before each procurement</div>
+  </div>
+
+</div>
+</body>
+</html>
